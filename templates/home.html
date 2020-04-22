@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <!-- images et CSS doivent être dans un dossier /static sous la racine -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}" </head>
+
+  <!-- images et CSS doivent être dans un dossier /static sous la racine -->
+  <body background="{{url_for('static', filename='lycee_la_source_light_v3.jpg')}}" />
+
+    <h1> {{ dossier }}</h1>
+    <h2> {{ eleve }}</h2>
+
+    <h3>Fonction du second degré <strong>{{ fonction2nd }}</em></h3>
+    <!-- <h4><em><strong>{{ fonction2nd }}</em></h4> -->
+    <!-- <p> &nbsp;</p> -->
+    <h3>Choix des fonctions :</h3>
+
+    <!-- passage des constantes a, b et c par l'URL qui dessine le graphe : -->
+    <h2><a href="{{ url_for('suite', cst_a='3', cst_b='2',cst_c='-10') }}"> dessiner le graphe de la fonction f(x) = 3x² + 2x -10</a></h2>
+    <!-- cela envoie : https://begin.pythonanywhere.com/next?cst_a=-3&cst_b=-2&cst_c=10 -->
+
+    <p> &nbsp;</p>
+    <!-- passage des constantes a, b et c par l'URL qui dessine le graphe :-->
+    <h2><a href="{{ url_for('suite', cst_a='-3', cst_b='-2',cst_c='10') }}"> dessiner le graphe de la fonction f(x) = -3x² -2x +10</a></h2>
+    <!-- cela envoie : https://begin.pythonanywhere.com/next?cst_a=3&cst_b=2&cst_c=-10 -->
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- chargement des styles du fichier main.css : utilisation de "url_for()" pour le trouver dans /static sous /mysite  -->
+	<link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"
+    <!-- import du JavaScript "Chart.min.js"  qui dessinera la courbe avec les ressources du browser utilisé -->
+    <script src='static/Chart.min.js'></script>
+</head>
+
+<body>
+    <!--  retour sur la page d'acceuil : utilisation de "url_for()" pour reconstituer l'URL correspondante  -->
+    <h2><a href="{{ url_for('hello') }}"> retourner à la page d'accueil </a></h2>
+    <h1> Graphe de la fonction : </h1>
+    <!--  (devrait être fait avant l'appel de la page...)   -->
+    <h1> f(x) = {{ cst_a }}x² + {{ cst_b }}x + {{ cst_c }}</h1>
+
+    <!-- canvas element : réserve une zone de pixel pour l'affichage -->
+    <center>
+    <canvas id="myChart" width="600" height="400"></canvas></center>
+     <h2><p id="pointSelected">Cliquez sur la courbe pour afficher les valeurs x et f(x)</p></h2>
+
+    <script>
+      // Global parameters:
+      // do not resize the chart canvas when its container does (keep at 600x400px)
+      Chart.defaults.global.responsive = false;
+
+      // define the chart data
+      var chartData = {
+        labels : [{% for item in labels %}
+                   "{{item}}",
+                  {% endfor %}],
+        datasets : [{
+            label: '{{ legend }}',
+            fill: false,               // evite la coloration sous la courbe
+            lineTension: 0.1,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,               // fait disparaitre les points
+            pointHitRadius: 10,
+            data : [{% for item in values %}
+                      {{item}},
+                    {% endfor %}],
+            spanGaps: false
+        }]
+      }
+
+      // get chart canvas
+      var holder = document.getElementById("myChart");
+      var ctx = document.getElementById("myChart").getContext("2d");
+
+      // create the chart using the chart canvas
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+          fill: false,
+          tooltips: {
+            enabled: true,
+            mode: 'nearest',                         // affiche les coordonnées X,Y du point selectionné sur la courbe
+            callbacks: {                           // appel de la fonction qui affiche X et Y sur le point selectionné
+              label: function(tooltipItems, data) {
+                       return 'Y = ' + tooltipItems.yLabel;
+                     }
+            }
+          },
+        }
+      });
+    </script>
+
+    </center>
+</body>
+
+</html>
